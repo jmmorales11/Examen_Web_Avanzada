@@ -42,8 +42,21 @@ const Registration = () => {
         const itemDocRef = doc(db, "movies", editingItem.id);
         await updateDoc(itemDocRef, formData);
         setEditingItem(null);
+        Swal.fire({
+          icon: 'success',
+          title: 'La película se ha editado correctamente',
+          showConfirmButton: false,
+          timer: 2000,
+        });
       } else {
         // Agregar un nuevo elemento
+        Swal.fire({
+          icon: 'success',
+          title: 'Registro Exitoso',
+          text: 'La película se ha agregado correctamente.',
+          showConfirmButton: false,
+          timer: 2000,
+        });
         await addDoc(itemsCollectionRef, formData);
       }
 
@@ -73,13 +86,34 @@ const Registration = () => {
 
   const deleteItem = async (itemId) => {
     try {
-      const itemDocRef = doc(db, "movies", itemId);
-      await deleteDoc(itemDocRef);
-      fetchItems();
+      // Mostrar SweetAlert de confirmación
+      const result = await Swal.fire({
+        title: '¿Estás seguro?',
+        text: '¡No podrás revertir esto!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Sí, eliminarlo'
+      });
+  
+      if (result.isConfirmed) {
+        // Usuario hizo clic en "Sí, eliminarlo"
+        const itemDocRef = doc(db, "movies", itemId);
+        await deleteDoc(itemDocRef);
+        fetchItems();
+        Swal.fire({
+          icon: 'success',
+          title: 'Elemento eliminado',
+          showConfirmButton: false,
+          timer: 2000,
+        });
+      }
     } catch (error) {
       console.log('Error al eliminar el elemento', error);
     }
   }
+  
 
   const fetchItems = async () => {
     setLoading(true);
