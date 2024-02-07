@@ -60,7 +60,30 @@ signInWithEmailAndPassword(auth, email,password);
 ```
 
 ## Integración con el Backend
-Se ha utilizado la base de datos propia de 
+Se ha utilizado la base de datos propia de Firebase que es Realtime Database, en ella se ha creado 2 colecciones una para el manejo del historial de los productos y otro para la información de los productos
+
+## Consumo de Servicios Web
+Se ha utilizado axios para realizar solicitudes HTTP como lo tenemos implementado en el archivo instancia.js
+```js
+import axios from "axios";
+export default axios.create({
+  baseURL: "https://web-exam-6c390-default-rtdb.firebaseio.com/",
+});
+```
+
+## Navegación entre las vistas
+Se ha utilizado rutas protegidas solo para 2 rutas en especifico que seria la de /dashboard y la de el historial de cada producto
+```jsx
+<Route
+  path="/dashboard"
+  element={<ProtectedRoute element={<Dashboard />} />}
+/>
+<Route
+  path="/historial/:productName/:productCode"
+  element={<ProtectedRoute element={<Historial />}/>}
+/>
+```
+Todas las demás rutas estan definidas como públicas
 
 
 ## Ejecutar la aplicación localmente
