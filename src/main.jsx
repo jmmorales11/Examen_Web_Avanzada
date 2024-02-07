@@ -1,10 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import ReactDOM from 'react-dom/client';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import App from './App.jsx';
-import Registration from './pages/Registration.jsx';
-import Dashboard from './pages/Dashboard.jsx';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import React, { useState, useEffect } from "react";
+import ReactDOM from "react-dom/client";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import App from "./App.jsx";
+import Registration from "./pages/Registration.jsx";
+import Dashboard from "./pages/Dashboard.jsx";
+import Inicio from "./pages/inicio/Inicio.jsx";
+import Historial from "./pages/Historial.jsx";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 const ProtectedRoute = ({ element }) => {
   const [authenticated, setAuthenticated] = useState(false);
@@ -14,7 +21,7 @@ const ProtectedRoute = ({ element }) => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setAuthenticated(!!user);
     });
-    
+
     return () => {
       // Limpia el efecto al desmontar el componente
       unsubscribe();
@@ -48,12 +55,22 @@ const Root = () => {
             element={authenticated ? <Navigate to="/dashboard" /> : <App />}
           />
           <Route
+            path="inicio"
+            element={authenticated ? <Navigate to="/inicio" /> : <Inicio />}
+          />
+          <Route
             path="/registro"
-            element={authenticated ? <Navigate to="/dashboard" /> : <Registration />}
+            element={
+              authenticated ? <Navigate to="/dashboard" /> : <Registration />
+            }
           />
           <Route
             path="/dashboard"
             element={<ProtectedRoute element={<Dashboard />} />}
+          />
+          <Route
+            path="/historial/:productName/:productCode"
+            element={<Historial />}
           />
         </Routes>
       </Router>
@@ -61,4 +78,4 @@ const Root = () => {
   );
 };
 
-ReactDOM.createRoot(document.getElementById('root')).render(<Root />);
+ReactDOM.createRoot(document.getElementById("root")).render(<Root />);
