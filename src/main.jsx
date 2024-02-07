@@ -70,7 +70,7 @@ const Root = () => {
           />
           <Route
             path="/historial/:productName/:productCode"
-            element={<Historial />}
+            element={<ProtectedRoute element={<Historial />}/>}
           />
         </Routes>
       </Router>
